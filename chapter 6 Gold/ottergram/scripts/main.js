@@ -45,7 +45,7 @@ function setDetailsFromThumb(thumbnail) {
   setDetails(url, titleFromThumb(thumbnail));
   if (url.includes('http'))
   {
-    resetThumbnails();
+    resetHackedItem();
     hackRandomItem();
   }
 }
@@ -67,34 +67,31 @@ function getThumbnailsArray() {
 
 function hackRandomItem() {
   var thumbnails = getThumbnailsArray();
-  var hackIndex = getRandomIntInclusive(0, 4);
-  console.log("hackIndex = " + hackIndex);
-  setThumbImage(thumbnails[hackIndex], "http://www.catsvscancer.org/wp-content/uploads/2015/04/Taco-Cat-Spelled-Backwards-Is-Taco-Cat.1-1024x767.jpg");
-  setThumbTitle(thumbnails[hackIndex], "Hacked!");
+  _hackedIndex = getRandomIntInclusive(0, 4);
+  var thumb = thumbnails[_hackedIndex];
+  console.log("hackIndex = " + _hackedIndex);
+  _hackedOriginalTitle = titleFromThumb(thumb);
+  _hackedOriginalUrl = imageFromThumb(thumb);
+  setThumbImage(thumb, "http://www.catsvscancer.org/wp-content/uploads/2015/04/Taco-Cat-Spelled-Backwards-Is-Taco-Cat.1-1024x767.jpg");
+  setThumbTitle(thumb, "Hacked!");
 }
 
-function resetThumbnails() {
-  var index = 0;
+function resetHackedItem() {
   var thumbnails = getThumbnailsArray();
-  thumbnails.forEach(function (thumb) {
-    setThumbTitle(thumb, _originalUrls[index]);
-    setThumbImage(thumb, _originalUrls[index]);
-    index = index + 1;
-  });
+  var thumb = thumbnails[_hackedIndex];
+  setThumbTitle(thumb, _hackedOriginalTitle);
+  setThumbImage(thumb, _hackedOriginalUrl);
 }
 
-var _originalUrls = [];
-var _originalTitles = [];
+var _hackedIndex;
+var _hackedOriginalUrl;
+var _hackedOriginalTitle;
 
 function initializeEvents() {
   'use strict';
-  var index = 0;
   var thumbnails = getThumbnailsArray();
   thumbnails.forEach(function (thumb) {
-    _originalUrls.push(imageFromThumb(thumb));
-    _originalTitles.push(titleFromThumb(thumb));
     addThumbClickHandler(thumb);
-    index = index + 1;
   });
   hackRandomItem();
 }
