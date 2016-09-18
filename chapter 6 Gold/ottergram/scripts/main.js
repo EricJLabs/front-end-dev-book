@@ -16,9 +16,19 @@ function imageFromThumb(thumbnail) {
   return thumbnail.getAttribute('data-image-url');
 }
 
+function setThumbImage(thumbnail, url) {
+  'use strict';
+  thumbnail.setAttribute('data-image-url', url);
+}
+
 function titleFromThumb(thumbnail) {
   'use strict';
   return thumbnail.getAttribute('data-image-title');
+}
+
+function setThumbTitle(thumbnail, title) {
+  'use strict';
+  thumbnail.setAttribute('data-image-title', title);
 }
 
 // Returns a random integer between min (included) and max (included)
@@ -29,32 +39,22 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var _hackIndex = getRandomIntInclusive(0, 4);
-var _lastHackThumbnail;
-
-function setDetailsFromThumb(thumbnail, index) {
+function setDetailsFromThumb(thumbnail) {
   'use strict';
-  if (_lastHackThumbnail != null) {
-    _hackIndex = getRandomIntInclusive(0, 4);
-    setDetails(imageFromThumb(_lastHackThumbnail), titleFromThumb(_lastHackThumbnail));
-    _lastHackThumbnail = null;
-  }
-
-  console.log("index = " + index + " hackIndex = " + _hackIndex);
-  if (index == _hackIndex){
-    _lastHackThumbnail = thumbnail;
-    setDetails("http://www.catsvscancer.org/wp-content/uploads/2015/04/Taco-Cat-Spelled-Backwards-Is-Taco-Cat.1-1024x767.jpg", "hacked");
-  }
-  else {
-    setDetails(imageFromThumb(thumbnail), titleFromThumb(thumbnail));
+  var url = imageFromThumb(thumbnail);
+  setDetails(url, titleFromThumb(thumbnail));
+  if (url.includes('http'))
+  {
+    resetThumbnails();
+    hackRandomItem();
   }
 }
 
-function addThumbClickHandler(thumb, index){
+function addThumbClickHandler(thumb){
   'use strict';
   thumb.addEventListener('click', function (event) {
     event.preventDefault();
-    setDetailsFromThumb(thumb, index);
+    setDetailsFromThumb(thumb);
   });
 }
 
@@ -65,14 +65,38 @@ function getThumbnailsArray() {
   return thumbnailArray;
 }
 
-function initializeEvents() {
-  'use strict';
+function hackRandomItem() {
   var thumbnails = getThumbnailsArray();
+  var hackIndex = getRandomIntInclusive(0, 4);
+  console.log("hackIndex = " + hackIndex);
+  setThumbImage(thumbnails[hackIndex], "http://www.catsvscancer.org/wp-content/uploads/2015/04/Taco-Cat-Spelled-Backwards-Is-Taco-Cat.1-1024x767.jpg");
+  setThumbTitle(thumbnails[hackIndex], "Hacked!");
+}
+
+function resetThumbnails() {
   var index = 0;
+  var thumbnails = getThumbnailsArray();
   thumbnails.forEach(function (thumb) {
-    addThumbClickHandler(thumb, index);
+    setThumbTitle(thumb, _originalUrls[index]);
+    setThumbImage(thumb, _originalUrls[index]);
     index = index + 1;
   });
+}
+
+var _originalUrls = [];
+var _originalTitles = [];
+
+function initializeEvents() {
+  'use strict';
+  var index = 0;
+  var thumbnails = getThumbnailsArray();
+  thumbnails.forEach(function (thumb) {
+    _originalUrls.push(imageFromThumb(thumb));
+    _originalTitles.push(titleFromThumb(thumb));
+    addThumbClickHandler(thumb);
+    index = index + 1;
+  });
+  hackRandomItem();
 }
 
 initializeEvents();
