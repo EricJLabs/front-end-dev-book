@@ -34,6 +34,7 @@ function setThumbTitle(thumbnail, title) {
 // Returns a random integer between min (included) and max (included)
 // Using Math.round() will give you a non-uniform distribution!
 function getRandomIntInclusive(min, max) {
+  'use strict';
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -66,6 +67,7 @@ function getThumbnailsArray() {
 }
 
 function hackRandomItem() {
+  'use strict';
   var thumbnails = getThumbnailsArray();
   _hackedIndex = getRandomIntInclusive(0, 4);
   var thumb = thumbnails[_hackedIndex];
@@ -77,6 +79,7 @@ function hackRandomItem() {
 }
 
 function resetHackedItem() {
+  'use strict';
   var thumbnails = getThumbnailsArray();
   var thumb = thumbnails[_hackedIndex];
   setThumbTitle(thumb, _hackedOriginalTitle);
