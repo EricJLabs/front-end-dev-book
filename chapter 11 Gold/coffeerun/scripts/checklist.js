@@ -20,6 +20,7 @@
     this.$element.on('click', 'input', function (event) {
     if (itemClick[this.$element] == null) {
       itemClick[this.$element] = 1;
+      this.$element.class = 'gray-text';
       setTimeout(function () {
         var email = event.target.value;
         this.removeRow(email);
@@ -30,10 +31,34 @@
     else
     {
       itemClick[this.$element] = itemClick[this.$element] + 1;
-      this.$element.class = 'gray-text';
+
+      var items = event.target.labels[0].innerText.split(', ');
+      var strength = items[0].replace('[', '').replace(']', '').replace('x', '');
+      $('input[name=strength]').val(strength);
+
+      var size = items[1];
+      SelectRadioButton('size', size);
+
+      var flavor = items[2];
+      if (flavor == 'none')
+        flavor = '';
+      $("#flavorShot").val(flavor);
+
+      var coffee = items[3];
+      var email = event.target.value;
+      if (coffee != email)// description is optional
+      {
+        $('input[name=coffee]').val(coffee);
+      }
+      $('input[name=emailAddress]').val(email);
+
     }
 
     }.bind(this));
+  }
+
+  function SelectRadioButton(name, value) {
+    $('input:radio[name="' + name + '"][value="' + value +'"]').prop('checked', true);
   }
 
   CheckList.prototype.addRow = function (coffeeOrder) {
@@ -74,9 +99,12 @@
     });
 
     var description = ' [' + coffeeOrder.strength + 'x]';
-    description += ' ' + coffeeOrder.size + ' '
-    if (coffeeOrder.flavor) {
-      description += coffeeOrder.flavor + ' ';
+    description += ', ' + coffeeOrder.size + ', '
+    if (coffeeOrder.flavor != '') {
+      description += coffeeOrder.flavor + ', ';
+    }
+    else {
+      description += 'none, ';
     }
 
     description += coffeeOrder.coffee + ', ';
