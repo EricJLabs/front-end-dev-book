@@ -1,0 +1,29 @@
+.carmel-text {
+    background-color: yellow;
+    color: #716c6c;
+    padding: 10px;
+}
+
+.almond-text {
+  background-color: brown;
+  color: #cac4c4;
+  padding: 10px;
+}
+
+.mocha-text {
+  background-color: black;
+  color: #cac4c4;
+  padding: 10px;
+}
+
+.pumpkinSpice-text {
+  background-color: orange;
+  color: white;
+  padding: 10px;
+}
+
+.gray-text {
+  background-color: white;
+  color: gray;
+  padding: 0;
+}
