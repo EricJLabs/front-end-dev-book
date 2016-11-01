@@ -8,6 +8,7 @@
   var FormHandler = App.FormHandler;
   var Validation = App.Validation;
   var CheckList = App.CheckList;
+  var webshim = window.webshim;
   var myTruck = new Truck(truckId, new DataStore());
   window.myTruck = myTruck;
   var checkList = new CheckList(CHECKLIST_SELECTOR);
@@ -19,4 +20,6 @@
   });
   formHandler.addInputHandlers(Validation.isCompanyEmail, Validation.isValidStrength);
   console.log(formHandler);
+  webshim.polyfill('forms forms-ext');
+  webshim.setOptions('forms', { addValidators: true, lazyCustomMessages: true});
 })(window, 'Java Express by HAL Inc.');
